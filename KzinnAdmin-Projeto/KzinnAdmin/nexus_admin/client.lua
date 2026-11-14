@@ -1,0 +1,31 @@
+local function notify(message)
+    BeginTextCommandThefeedPost('STRING')
+    AddTextComponentSubstringPlayerName(message)
+    EndTextCommandThefeedPostTicker(false, false)
+end
+
+RegisterNetEvent('nexus_admin:client:notice', function(sender, message)
+    notify(('[%s] %s'):format(sender or 'Administração', message or ''))
+end)
+
+RegisterNetEvent('nexus_admin:client:heal', function()
+    local ped = PlayerPedId()
+    SetEntityHealth(ped, GetEntityMaxHealth(ped))
+    ClearPedBloodDamage(ped)
+    ResetPedVisibleDamage(ped)
+    notify('Você recebeu atendimento da administração.')
+end)
+
+RegisterNetEvent('nexus_admin:client:revive', function()
+    local ped = PlayerPedId()
+    local coords = GetEntityCoords(ped)
+    NetworkResurrectLocalPlayer(coords.x, coords.y, coords.z, GetEntityHeading(ped), true, false)
+    SetEntityHealth(PlayerPedId(), GetEntityMaxHealth(PlayerPedId()))
+    ClearPedTasksImmediately(PlayerPedId())
+    notify('Você foi revivido pela administração.')
+end)
+
+RegisterNetEvent('nexus_admin:client:freeze', function(state)
+    FreezeEntityPosition(PlayerPedId(), state == true)
+    notify(state and 'Você foi congelado pela administração.' or 'Você foi liberado pela administração.')
+end)
