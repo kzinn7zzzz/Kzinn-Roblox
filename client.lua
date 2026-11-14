@@ -1,0 +1,5 @@
+RegisterNetEvent('nexus_admin:client:notice', function(sender, message)
+    BeginTextCommandThefeedPost('STRING')
+    AddTextComponentSubstringPlayerName(('[%s] %s'):format(sender, message))
+    EndTextCommandThefeedPostTicker(false, false)
+end)
